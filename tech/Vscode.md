@@ -1,0 +1,38 @@
+- Zen Mode is distraction-free view :  `Ctrl + K + Z`
+- Command Pallet : `Ctrl + Shift + P`
+- Select text word by word : `Ctrl + Shift + Left/Right arrow`
+- Move a selected line up/down : `Alt + Up/Down arrow`
+- Add cursir at different places manually : `Alt + left click`
+- Delete the current line : `Ctrl + Shift + K`
+- Commenting lines : `Ctrl + -`
+- Remove Comments from lines : `Ctrl + .`
+- Expand/Collapse the left sidebar : `Ctrl + b`
+- Spliting the view : `Ctrl + \`
+- Switch between split views : `Ctrl + 1`,  `Ctrl + 2`
+- Copy the current line to up or down : `Shift + Alt + Down/Up`
+- Navigate to a specific line number : `Ctrl + g + the line number`
+- return the cursor to its previous position in the file : `Ctrl + U`
+- Select current line : `Ctrl + L`
+- Open markdown preview : `Ctrl + Shift + v`
+- Side by side markdown edit and preview : `Ctrl + K + v`
+- Setup VScode as the default merge tool : git config merge.tool code
+- Rainbow CSV: extension to color code the CSV files
+- Go to definition : `Ctrl + D`
+- Find all references : `Ctrl + Alt + D`
+- Searching for a text in current file : `Ctrl + F`
+	 - Find Next : `Enter`
+	 - Find Previous : `Shift + Enter`
+ - Search for a text in all files: `Ctrl + Shift + F`
+- Scroll Up / Down : `Ctrl + Up/Down`
+- Find a file by name : `Ctrl + P`
+- Open Shortcut key settings : `Ctrl + K + Ctrl + S`
+- Open Terminal : `Ctrl + ` `
+- Go to beginning or end of a file : `Ctrl + Home/End`
+- Enable **sticky Scroll** in settings : show Class/Function name always at the top when scrolling
+- Open Settings : `Ctrl + ,`
+- Zoom in / out : `Ctrl + =`  , `Ctrl + -`
+- Create a new file : `Ctrl + N`
+- Indent / Outdent Lines : `Ctrl + ]` , `Ctrl + [`
+- Switch between opened tabs : `tab + Ctrl`
+- Go to Next/Previous position in code : `Alt + right/left`
+- Switch between Editor and sidebar : `Ctrl + 1/0`
