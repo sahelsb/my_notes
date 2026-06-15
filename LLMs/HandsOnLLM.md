@@ -90,7 +90,7 @@
     - Instead, it uses the **hidden states of all input words** with attention weights.
     - Enables richer context representation during generation.
 
-![[notes/LLMs/imgs/attention.png]]
+![[attention.png]]
 ### Example: Translation with Attention
 
 - Step-by-step for _“Ik hou van lama’s”_:
@@ -149,7 +149,7 @@
     3. **Feedforward Neural Network**
         - Same as in the encoder.
 
-![[notes/LLMs/imgs/decoder.png]]
+![[decoder.png]]
 
 ![[masked.png]]
         

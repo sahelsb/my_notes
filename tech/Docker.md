@@ -6,7 +6,7 @@
 
 DevOps is a development methodology aimed at bridging the gap between Development and Operations, emphasizing communication and collaboration, continuous integration, quality assurance and delivery with automated deployment utilizing a set of development practices
 
-![](./images/Devops.png)
+![](Devops.png)
 
 Developers team  vs   Operation team
 
@@ -52,25 +52,25 @@ What a headache to start installing and then managing the development databases 
 
 #### Without docker :
 
-![](./images/NoDocker.png)
+![](NoDocker.png)
 
 #### Without docker the same oracle WebLogic should installed multiple times :
 
-![](./images/NoDocker2.png)
+![](NoDocker2.png)
 
 
 #### With docker : 
 
-![](./images/WithDocker.png)
+![](WithDocker.png)
 
 
 ## How does Docker work 
 
-![](./images/DockerEngine.png)
+![](DockerEngine.png)
 
 ### Docker components :
 
-![](./images/DockerComponents.png)
+![](DockerComponents.png)
 
 ### Docker client and server :
 
@@ -83,7 +83,7 @@ What a headache to start installing and then managing the development databases 
 3. **REST API:** The REST API acts as a bridge between the daemon and the client. Any command issued using the client passes through the API to finally reach the daemon.
 
 
-![](./images/DockerServer.png)
+![](DockerServer.png)
 
 ### Docker images :
 
@@ -97,7 +97,7 @@ Syntax for creating a docker container using docker image :
 
 ### Docker container :
 
-![](./images/DockerContainer.png)
+![](DockerContainer.png)
 
 
 ### Docker Registry :
@@ -105,12 +105,12 @@ Syntax for creating a docker container using docker image :
 Now with a lot of people working on your project you want to let all the people access the docker image so docker registry is for this. An image registry is a centralized place where you can upload your images and can also download images created by others. [Docker Hub](https://hub.docker.com/) is the default public registry for Docker.
 
 
-![](./images/DockerRegistry2.png)
+![](DockerRegistry2.png)
 
 
 ### Recap :
 
-![](./images/Recap.png)
+![](Recap.png)
 
 
 ### Installing docker : 

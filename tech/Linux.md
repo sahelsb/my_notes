@@ -310,4 +310,10 @@ Edit /etc/wsl.conf (or create the file if it doesn't exist):
 
 
 
+#### Create a shell alias:
 
+This way with creating an alias you can just access the folder in your windows with an alias in wsl terminal
+
+ ```bash
+ echo "alias obsidian='cd /mnt/c/Users/slbloukat/workspace/obsidian'" >> ~/.zshrc
+ ```

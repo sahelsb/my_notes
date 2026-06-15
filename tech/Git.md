@@ -103,7 +103,7 @@ Each of these "levels" (system, global, local) overwrites values in the previous
 
 
 
-![](./images/Git.png)
+![](Git.png)
 
 ### Commits:
 
@@ -215,7 +215,7 @@ $ git remote -v
       #merge changes from new branch to the main branch
       git merge branch_name  
 
-  ![](./images/Repo.png)
+  ![](Repo.png)
 
   adding a file named Readme to our local repository, a file with the header My Project
       echo  “# My project “ Readme.md
@@ -429,13 +429,13 @@ We have to repeat below four steps, for every github account we want to access t
 
 ### Different types of merge
 
-![](./images/1_merge.png)
+![](1_merge.png)
 ##### - Merge
 A standard merge will take each commit in the branch being merged and add them to the history of the base branch based on the timestamp of when they were created.
 
 It will also create a merge commit, a special type of “empty” commit that indicates when the merge occurred
 
-![](./images/2_merge.png)
+![](2_merge.png)
 
  
 
@@ -445,13 +445,13 @@ If we change our example so **no new commits** were made to the base branch si
 
 This is as if you made the commits directly on the base branch. The idea is because no changes were made to the base branch there’s no need to capture a branch had occurred.
 
-![](./images/3_merge.png)
+![](3_merge.png)
 
 ##### - Squash and merge
 
 Squash takes all the commits in the branch (A,B,C) and melds them into 1 commit. That commit is then added to the history, but none of the commits that made up the branch are preserved
 
-![](./images/4_merge.png)
+![](4_merge.png)
 
 ##### - Rebase and merge
 
@@ -465,7 +465,7 @@ Rebase will make the history linear.
 
 `git rebase <targetbranch>`
 
-![](./images/5_merge.png)
+![](5_merge.png)
 
 
 ## Merge Conflicts 
@@ -478,14 +478,15 @@ To resolve a merge conflict caused by competing line changes, you must choose wh
 
   In this example, one person wrote "open an issue" in the base or HEAD branch and another person wrote "ask your question in IRC" in the compare branch or `branch-a`.
 	
- ```text
+ text
 If you have questions, please
 <<<<<<< HEAD
 open an issue
 =======
 ask your question in IRC.
 >>>>>>> branch-a
-```
+>>>>>>> 
+>>>>>>> 
 
 2. Decide if you want to keep only your branch's changes, keep only the other branch's changes, or make a brand new change, which may incorporate changes from both branches. Delete the conflict markers `<<<<<<<`, `=======`, `>>>>>>>` and make the changes you want in the final merge. In this example, both changes are incorporated into the final merge
 
@@ -972,11 +973,44 @@ It pulls new commits from _remote dev_.
 Then rebases your _local unpushed commits_ on top of the updated remote.
 This avoids `Merge branch 'origin/dev'`
 
+
+---
+
+## Rebase Summary
+ 
+`git rebase origin/dev`
+ 
+- Takes your current branch commits
+- Temporarily removes them
+- Applies the latest `origin/dev` commits first
+- Replays your commits on top of it
+- Creates a **clean, linear history**
+
+Result: your feature branch looks like it was built from the latest `dev` from the start.
+
+
+Use rebase when:
+
+- `dev` has new changes you need
+- Before opening a Pull Request
+- Before merging feature → dev
+- You want to sync your feature branch with latest `dev`
+
+
+Why use rebase
+
+- Keeps history clean (no messy merge commits)
+- Makes PRs easier to review
+- Reduces future merge conflicts
+- Keeps feature branch up to date with `dev`
+
+
 ---
 
 ### What is GitLab CI/CD?
 
 GitLab CI/CD is GitLab’s built-in system for automating tasks in your repository, such as building, testing, and deploying your code. You define instructions for the automation in a file called `.gitlab-ci.yml`, which lives in your repository. Every time you push code or create a merge request, GitLab runs these instructions on its CI runners. This ensures your code is consistently built and tested automatically, and allows you to deploy updates without manual steps.
+
 
 ### What is GitLab Pages?
 
@@ -1083,3 +1117,19 @@ git push
 Then push and you see only one commit message instead of the last three.
 
 ---
+
+
+##### Gitlab Default/protected branch
+
+GitLab sets the first branch you push as the default branch, and the default branch is protected automatically
+
+keep working on dev, create main later 
+Just keep committing to dev. When your code is solid, create main from dev and make it the default:
+
+```
+git checkout -b main
+git push -u origin main
+Then in GitLab: Settings → Repository → Branch defaults → set default to main.
+```
+
+
