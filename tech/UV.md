@@ -60,3 +60,13 @@ All the info we need to run our code is in `pyproject.toml` and `uv.lock` so if 
 
 ---
 
+
+
+``` bash
+cd src && uv run uvicorn api:app --host 0.0.0.0 --port 10000
+
+
+ORRR
+
+uv run uvicorn api:app --app-dir src --host 0.0.0.0 --port 10000
+```

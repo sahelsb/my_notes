@@ -54,6 +54,7 @@ You already created an API that:
 - The _path_ `/items/{item_id}` has an optional `str` _query parameter_ .
 
 
+
 #### Path parameters vs Query parameters
 
 **path parameters** are used to **identify a specific resource or resources**, while **query parameters** are used to **sort/filter those resources**.

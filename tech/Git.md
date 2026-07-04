@@ -952,9 +952,11 @@ git rebase --continue  # only if there were conflicts
 # 3. Force push the rebased feature branch
 git push --force_with_lease
 
-# 4. Merge back into dev without a merge commit
+# 4. Merge back into dev without a merge commit (fast-forward)
 git checkout dev
-git merge --ff-only refactor
+git fetch origin
+git pull --ff-only
+git merge refactor
 
 # 5. Push updated dev
 git push
@@ -974,6 +976,55 @@ Then rebases your _local unpushed commits_ on top of the updated remote.
 This avoids `Merge branch 'origin/dev'`
 
 
+#### Rebase conflict
+
+In a rebase, ***VS Code's labels*** map like this:
+- Current Change = HEAD = the branch you're rebasing onto = dev's baseline 
+- Incoming Change = the commit being replayed = your feature's edit 
+
+In a rebase, 
+--ours = the branch you're rebasing onto (dev),
+--theirs = your commit. 
+So take dev's baseline:
+
+```bash
+git checkout --ours packages/db/drizzle/0000_amazing_nocturne.sql
+git add packages/db/drizzle/0000_amazing_nocturne.sql
+git rebase --continue
+```
+
+rebase replays your commits oldest → newest, one at a time.
+
+ After you resolve a conflict, git reopens the commit message so you can tweak it if you want.
+
+
+### dev branch is force pushed
+
+when dev branch which you are trying to pull is force pushed then
+
+`git pull --ff-only` errors ("diverged") → dev was force-pushed.
+
+Reset local dev to the remote, then continue: 
+`git reset --hard origin/dev`.
+
+
+
+### get the latest dev on a feat branch which is not implement on 
+
+```bash
+# Switch to dev
+git checkout dev
+
+# Get the latest changes
+git pull origin dev
+
+# Switch back to your feature branch
+git checkout your-branch
+
+# Rebase onto the updated dev
+git rebase dev
+```
+ 
 ---
 
 ## Rebase Summary
@@ -1133,3 +1184,18 @@ Then in GitLab: Settings → Repository → Branch defaults → set default to m
 ```
 
 
+---
+
+### Add a new change to the last commit message
+
+how to amend a commit message when you did not have push yet :
+
+```bash
+# stage the new chnages
+git add .
+
+# fold it into the last commit, keeping the same message
+git commit --amend --no-edit
+```
+
+- `--no-edit` keeps the existing message. Drop it (`git commit --amend`) if you want to edit the message in the editor.
