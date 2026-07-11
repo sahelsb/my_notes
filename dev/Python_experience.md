@@ -1,7 +1,7 @@
 #### argparse
 Handles command-line parsing
 
-```
+```python
 import argparse
 def parse_args(): 
 	parser = argparse.ArgumentParser(description='Train a neural network to      
@@ -17,7 +17,7 @@ def parse_args():
 
 A **lambda function** in Python is a concise way to create an **anonymous function**, meaning a function that is defined without a name
 
-```
+```python
 lambda arguments: expression
 ```
 
@@ -28,7 +28,7 @@ lambda arguments: expression
 Lambda functions are commonly used with **functional programming constructs** like `map()`, `filter()`, and `reduce()`.
 
 
-```
+```python
 # Regular function 
 def add(x, y): 
 return x + y 
@@ -37,7 +37,7 @@ return x + y
 add_lambda = lambda x, y: x + y
 ```
 
-```
+```python
 numbers = [1, 2, 3, 4]
 # Square each number using a lambda function 
 squared = map(lambda x: x ** 2, numbers)
@@ -52,7 +52,7 @@ squared = map(lambda x: x ** 2, numbers)
 It’s important to remember that it’s your responsibility to close the file. In most cases, upon termination of an application or script, a file will be closed eventually. However, there is no guarantee when exactly that will happen. This can lead to unwanted behavior including resource leaks.
  The best way to close a file is to use the `with` statement. The `with` statement automatically takes care of closing the file once it leaves the `with` block, even in cases of error.
  
-```
+```python
 with open('./data/data.txt', 'r' or 'w') as f:
 	data = f.read()
 	f.write('dddd')
@@ -63,7 +63,7 @@ with open('./data/data.txt', 'r' or 'w') as f:
 
 - `.readline(size = -1)` : This reads at most `size` number of characters from the line. This continues to the end of the line and then wraps back around. If no argument is passed or `None` or `-1` is passed, then only **one** entire line (or rest of the line) is read.
 
-```
+```python
 line = f.readline()    # reads only one line and returns it
 while line != '':  # The EOF char is an empty string
 	print(line)
@@ -75,7 +75,7 @@ while line != '':  # The EOF char is an empty string
 - ### strip()
 The `strip()` method removes any leading, and trailing whitespaces.
 
-```
+```python
  with open("./data/data1.txt") as f:
 	data = [line.strip() for line in f.readlines()]
         
@@ -84,14 +84,14 @@ The `strip()` method removes any leading, and trailing whitespaces.
 - ### split()
 The `split()` method splits a string into a list. You can specify the separator, default separator is any whitespace. `string.split(separator, maxsplit)`
 
-```
+```python
 line.split()[0]
 ```
 
 ## zip()
 `zip()` in Python aggregates elements from multiple iterables into tuples. `zip()` is **lazy** in Python, meaning it returns an iterator instead of a list. list(zipped variable) will return a list of tuples.
 
-```
+```python
 sorted_first = [2,3,4,5]
 sorted_second = [4,5,6,7]
 for first,second in zip(sorted_first,sorted_second):
@@ -100,7 +100,7 @@ for first,second in zip(sorted_first,sorted_second):
 
 ## dictionary
 - ### count.get(a,0)
-```
+```python
 count = {a:1, b:2}
 count.get(a,0)   # return 0 if there is no 'a' in count, otherwise returns its value (here `1`)
 ```
@@ -110,3 +110,54 @@ count.get(a,0)   # return 0 if there is no 'a' in count, otherwise returns its v
 
 - `list[indices]` fails when `indices` is a list of ints (e.g. `[0, 2, 5]`).
 - `numpy_array[indices]` **works** and gives a sub-array — **this is called fancy indexing in NumPy.**
+
+
+
+### Building Dynamic SQL Queries in Python
+
+When building search or filter features, you often don't know ahead of time which filters a user will pick. You need to build the SQL query dynamically while keeping it safe from **SQL Injection**.
+
+##### The Core Strategy
+1. **Default Argument**: Use `filter: dict = None` to make filters optional.
+2. **Build Conditions**: Loop through the dictionary to create a **list of placeholders** (like `column_name = ?`).
+3. **Keep Values Separate**: Put the actual values into a matching list to pass safely into the executor later.
+4. **Join with AND**: Use `" AND ".join()` to glue the conditions together only if filters were actually provided.
+
+```python
+def get_filtered_data(filter_dict: dict = None) -> list:
+    # 1. Handle optional input gracefully
+    if not filter_dict:
+        filter_dict = {}
+
+    query = "SELECT * FROM my_table"
+    where_clauses = []
+    query_params = []
+
+    # 2. Extract columns and separate values from placeholders
+    for column, value in filter_dict.items():
+        # WARNING: Only do this if 'column' comes from trusted internal code, 
+        # never directly from user input (sanitize column names if needed).
+        where_clauses.append(f"{column} = ?") 
+        query_params.append(value)
+
+    # 3. Assemble the WHERE string only if conditions exist
+    if where_clauses:
+        query += " WHERE " + " AND ".join(where_clauses)
+
+    # 4. Execute safely
+    conn = get_db_connection()
+    cursor = conn.execute(query, query_params) # Params replace the '?' safely
+    return cursor.fetchall()
+```
+
+
+#### Security risk :
+
+```python
+where_clauses.append(f"{column} = ?")   # column name → string-interpolated  
+query_params.append(value)               # value → parameterized (?)          
+
+```
+
+ - The value is parameterized (?) → safe from injection. Good.
+- The column name is interpolated straight into the SQL string. You cannot parameterize identifiers (column/table names) in SQL — only values. So **if column ever comes from client/user input, that's a SQL-injection hole** (e.g. **a client sends column = "1=1; DROP TABLE …"**).
