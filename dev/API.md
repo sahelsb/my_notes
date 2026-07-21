@@ -172,3 +172,31 @@ To make a field optional, use **None** as the default value:
 async def handle_form_optional(username: str = Form(...), age: int = Form(None), email: str = Form(None)):
     return {"username": username, "age": age, "email": email}
 
+
+
+---
+
+### Statefull vs Stateless API
+
+A **stateless API** means **the server does not retain any memory** (state) of the client **between requests**. **Every single request** that comes in must **contain all the information** the server needs to understand and process it.
+
+- **Reliability:** If your request fails, you can just send it again without worrying about messing up a sequence of events.
+    
+- **Infinite Scaling:** If Netflix has 10,000 servers, you don't need to talk to the exact same server for every request. **Because your request contains all the needed information** (like your user ID and authentication token), _any_ available server can handle it.
+
+
+---
+### Idempotent
+
+An operation is **idempotent** if doing it multiple times yields the exact same final result as doing it just once.
+
+Your API applies "upserts" (insert a record if it doesn't exist, update it if it does) and "versioned deletes." Making this batch idempotent is a massive safety net.
+
+If a mobile app sends a batch of data to the server, but the Wi-Fi drops before the server can reply "Success!", the app doesn't know if the data was saved. Because the **endpoint is idempotent**, the app can just safely retry sending the exact same batch. The server will say, "I already have these exact updates and deletes," and simply confirm the state without creating duplicate records or crashing.
+
+---
+### Upsert
+
+Your API applies "upserts" means **insert a record if it doesn't exist, update it if it does**
+
+---
