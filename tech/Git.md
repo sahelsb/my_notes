@@ -976,6 +976,14 @@ Then rebases your _local unpushed commits_ on top of the updated remote.
 This avoids `Merge branch 'origin/dev'`
 
 
+```bash
+git pull --rebase origin main
+```
+1. Fetch — downloads the latest commits from origin (the remote) for the main branch. This updates your local origin/main pointer to match what's on the server 
+
+2. Rebase — instead of merging, it replays your local commits on top of the fetched remote commits.
+
+
 #### Rebase conflict
 
 In a rebase, ***VS Code's labels*** map like this:
