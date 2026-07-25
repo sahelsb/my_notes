@@ -161,3 +161,67 @@ query_params.append(value)               # value → parameterized (?)
 
  - The value is parameterized (?) → safe from injection. Good.
 - The column name is interpolated straight into the SQL string. You cannot parameterize identifiers (column/table names) in SQL — only values. So **if column ever comes from client/user input, that's a SQL-injection hole** (e.g. **a client sends column = "1=1; DROP TABLE …"**).
+
+
+## Project structure root run
+
+##### The problem
+The `src/` folder held flat top-level modules (`api.py, service.py, db.py, …`) that **imported
+each other by bare name** (`from service import ...`). **Those imports only resolve when that
+exact directory is on Python's import path (sys.path).**
+  - `uv run python src/mcp_service.py` worked — **running a script auto-adds the script's own folder (src/) to sys.path.**
+  - `uvicorn api:app` did not work from root — the **api:app import string is resolved against
+  the current working directory**, which is why it forced `cd src && uvicorn ....`
+
+##### The Solution
+Turned the project into a proper installable package
+Use a `src/-layout package`, not flat modules. Code lives in `src/<pkgname>/`, imports are relative or package-qualified (`from .db import / from mypkg.db import`).
+
+1. Move `src/*.py` + `static/ `into `src/integra/` (**a real package** with `__init__.py`).
+2. Change all **internal imports to relative** (`from .service import ...`).
+3. Added a build backend + package config + console entry points in `pyproject.toml`:
+
+  ```python
+  
+  ## terminal commands your package provides
+  ## the command integra-api runs the function run_api inside the module integra.cli
+  [project.scripts]
+  integra-api   = "integra.cli:run_api"
+  integra-mcp   = "integra.mcp_service:main"
+  integra-index = "integra.main:main"
+
+
+## This tells uv/pip: "my project is a real package — here's the tool that knows how to package it.
+  [build-system]
+  requires = ["hatchling"]
+  build-backend = "hatchling.build"
+
+
+## where your code lives , This is a hatchling-specific setting that answers one question: "which folder is the actual package to install?"
+  [tool.hatch.build.targets.wheel]
+  packages = ["src/integra"]
+  ```
+  
+- hatchling is a build backend — a small program that knows how to take your source files
+  and turn them into an installable package (a wheel).
+	  - Without this block, your project was just "a folder with a `pyproject.toml` listing
+	  dependencies." uv installed the dependencies but never installed your code — that's
+	  exactly why imports depended on the working directory.
+	  - With this block, `uv sync` actually installs integra into the venv, so `import integra`
+	  works from anywhere.
+
+- command-line command
+	- Format is always `command-name = "module.path:function_name"`. The `:` separates the module from the function to call.
+	  When you `uv sync`, it generates a tiny executable named integra-api in `.venv/bin/ `that, when run, imports integra.cli and calls run_api(). That's why `uv run integra-api` works from any directory — it's a real installed command, not a script file you have to point at.
+
+  4. `uv sync` installs integra into the venv (editable), so **it imports from any directory**.
+
+
+##### Attention
+**Never patch `sys.path` at runtime to make imports work. If you're reaching for `sys.path.insert(...)` in the script, the real problem is that the project isn't packaged.**
+
+```python
+sys.path.insert(0, str(Path(__file__).parent / "src")) 
+```
+
+**Rule of thumb**: if running your app depends on which folder you're standing in, the project isn't packaged correctly yet.
