@@ -1207,3 +1207,26 @@ git commit --amend --no-edit
 ```
 
 - `--no-edit` keeps the existing message. Drop it (`git commit --amend`) if you want to edit the message in the editor.
+
+---
+
+```bash
+git reset --soft HEAD~1        # took the commit back, changes stay staged
+  git lfs install
+  git lfs track "*.jpg"         # writes .gitattributes (*.png was added too)
+  git rm --cached apps/web/public/wall-texture.jpg   # out of the index …
+  git add .gitattributes apps/web/public/...         # … and back in, now as an LFS pointer
+  
+  
+  git commit -m "…"             # → 2830fba
+  git push --force-with-lease origin dev   # LFS upload OK, push rejected: protected branch
+  
+  
+  git commit --amend -m "feat(ui): …"      # → cd784c2
+  git push --force-with-lease origin dev   # rejected: non-fast-forward (diverged)
+```
+
+
+- `git rm --cached + re-git add `— necessary because `.gitattributes` is only evaluated when a file is added to the index. A file that's already staged won't move into LFS on its own.
+- `git commit --amend` — replaces the last commit (new hash!). Harmless as long as it hasn't been
+  pushed.

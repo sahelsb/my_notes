@@ -217,6 +217,12 @@ Use a `src/-layout package`, not flat modules. Code lives in `src/<pkgname>/`, i
   4. `uv sync` installs integra into the venv (editable), so **it imports from any directory**.
 
 
+##### Summary
+`__init__.py` makes a directory an importable package. It's why `from harness.case import Case` resolves. Without it, harness is just a directory on disk.
+
+  Root files don't need one because they're already top-level modules — the project directory
+  itself is on sys.path, so import agent works directly. A file at root is a module; a folder
+  needs the marker to become a package.
 ##### Attention
 **Never patch `sys.path` at runtime to make imports work. If you're reaching for `sys.path.insert(...)` in the script, the real problem is that the project isn't packaged.**
 
