@@ -6,7 +6,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 
-```
+```bash
 uv init
 ```
 
@@ -30,7 +30,7 @@ this will install and add the package in the dependencies section in `pyproject.
 uv pip install langchain
 ```
 
-this will just install the package but not  creating the `uv.lock` or `pyproject.toml` and also add the package to dependencies section in `pyproject.toml`
+this will just install the package but not  creating the `uv.lock` or `pyproject.toml` and does not also add the package to dependencies section in `pyproject.toml`
 
 
 to run the project
@@ -55,7 +55,7 @@ uv sync
 
 
 **Note** 
-All the info we need to run our code is in `pyproject.toml` and `uv.lock` so if we remove the virtual environment and then run `uv run main.py` and it will install all the packages again automatically
+All the info we need to run our code is in `pyproject.toml` and `uv.lock` so **if we remove the virtual environment** and then run `uv run main.py` and **it will install all the packages again** automatically
 
 
 ---

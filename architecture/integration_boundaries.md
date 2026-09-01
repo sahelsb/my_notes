@@ -45,3 +45,10 @@ integra → HTTP. It's a service: owns the sqlite DB, runs as integra-api / inte
 simple_eval → dependency. It's a library: graders.py, evaluator.py, models.py — pure functions and pydantic types, nothing running, no port to call. It's your measuring apparatus, not the thing measured. You'll hand it Case objects and grading functions, which don't survive a JSON round-trip. "POST /grade, body: my grader function" is absurd.  
   
 ```
+
+
+---
+
+### Rule of thumb:
+- `.env` → things that change per machine/deployment, secrets, and infra wiring (paths, URLs, keys, backend selection). Stuff a deployer changes without touching code.
+- `config.py` → application/domain logic and constants that are part of how the app works. Stuff a developer changes, that should be versioned and code-reviewed.

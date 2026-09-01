@@ -1230,3 +1230,55 @@ git reset --soft HEAD~1        # took the commit back, changes stay staged
 - `git rm --cached + re-git add `— necessary because `.gitattributes` is only evaluated when a file is added to the index. A file that's already staged won't move into LFS on its own.
 - `git commit --amend` — replaces the last commit (new hash!). Harmless as long as it hasn't been
   pushed.
+---
+
+### Commit with Multiple Paragraphs
+
+Use **one `-m` per paragraph**. Git inserts the blank lines automatically.
+
+```bash
+git commit -m "Heading" -m "Paragraph 1." -m "Paragraph 2."
+```
+
+```bash
+  git commit -m "feat: research the open fields, sourced from several references" \
+    -m "- The pre-filter is a preference now, not a gate" \
+    -m "- Serve the open fields as the work list, and refuse writes to approved or already filled fields" \
+    -m "- Let one value cite every reference it rests on, a single id or several"
+```
+#### Multiline Command
+
+Use a backslash (`\`) at the end of **every line except the last one**.
+
+> **Important:** Nothing may come after the `\` — **no spaces**.
+
+Each `-m` and its complete text must be on **one line**.
+
+```bash
+git commit --amend \
+
+-m "feat: short description" \
+
+-m "Why, and what cannot be seen in the diff." \
+
+-m "BREAKING: what will no longer work afterwards."
+```
+
+#### Long Commit Message
+
+Put the commit message in a file:
+
+`git commit -F message.txt`
+
+#### Change a Commit Afterwards
+
+```bash
+git commit --amend -F message.txt   # Files remain unchanged
+
+git log -1                           # Check the commit
+
+git push --force-with-lease origin dev  # Only if the commit was already pushed
+```
+
+
+---

@@ -53,7 +53,7 @@ scp user@cip4d3:/home/cip/2021/user/Documents  uni/documents
     
 
 #### copy files from windows to wsl
-```
+```bash
      first navigate to the desired path in WSL
     # then copy "a.txt" to a folder called tmp in wsl 
     cd ~/workspace/data
